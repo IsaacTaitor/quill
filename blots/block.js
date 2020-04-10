@@ -165,26 +165,24 @@ class BlockEmbed extends EmbedBlot {
 BlockEmbed.scope = Scope.BLOCK_BLOT;
 // It is important for cursor behavior BlockEmbeds use tags that are block level elements
 
-function blockDelta(blot, filter = true) {
+function blockDelta(blot) {
   return blot
     .descendants(LeafBlot)
     .reduce((delta, leaf) => {
       if (leaf.length() === 0) {
         return delta;
       }
-      return delta.insert(leaf.value(), bubbleFormats(leaf, {}, filter));
+      return delta.insert(leaf.value(), bubbleFormats(leaf));
     }, new Delta())
     .insert('\n', bubbleFormats(blot));
 }
 
-function bubbleFormats(blot, formats = {}, filter = true) {
+function bubbleFormats(blot, formats = {}) {
   if (blot == null) return formats;
   if (typeof blot.formats === 'function') {
     formats = extend(formats, blot.formats());
-    if (filter) {
-      // exclude syntax highlighting from deltas and getFormat()
-      delete formats['code-token'];
-    }
+    // exclude syntax highlighting from deltas and getFormat()
+    delete formats['code-token'];
   }
   if (
     blot.parent == null ||
@@ -193,7 +191,7 @@ function bubbleFormats(blot, formats = {}, filter = true) {
   ) {
     return formats;
   }
-  return bubbleFormats(blot.parent, formats, filter);
+  return bubbleFormats(blot.parent, formats);
 }
 
 export { blockDelta, bubbleFormats, BlockEmbed, Block as default };

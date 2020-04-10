@@ -1,7 +1,7 @@
-import Bold from './bold';
+import Inline from '../blots/inline';
 
-class Strike extends Bold {}
+class Strike extends Inline {}
 Strike.blotName = 'strike';
-Strike.tagName = ['S', 'STRIKE'];
+Strike.tagName = 'S';
 
 export default Strike;

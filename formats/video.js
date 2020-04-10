@@ -1,4 +1,5 @@
 import { BlockEmbed } from '../blots/block';
+import videoUtils from '../../../app/utils/videoUtils';
 import Link from './link';
 
 const ATTRIBUTES = ['height', 'width'];

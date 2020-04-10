@@ -16,7 +16,7 @@ const TokenAttributor = new ClassAttributor('code-token', 'hljs', {
 class CodeToken extends Inline {
   static formats(node, scroll) {
     while (node != null && node !== scroll.domNode) {
-      if (node.classList && node.classList.contains(CodeBlock.className)) {
+      if (node.classList.contains(CodeBlock.className)) {
         return super.formats(node, scroll);
       }
       node = node.parentNode;
@@ -112,7 +112,7 @@ class SyntaxCodeBlockContainer extends CodeBlockContainer {
     if (forced || this.forceNext || this.cachedText !== text) {
       if (text.trim().length > 0 || this.cachedText == null) {
         const oldDelta = this.children.reduce((delta, child) => {
-          return delta.concat(blockDelta(child, false));
+          return delta.concat(blockDelta(child));
         }, new Delta());
         const delta = highlight(text, language);
         oldDelta.diff(delta).reduce((index, { retain, attributes }) => {
@@ -167,10 +167,6 @@ class Syntax extends Module {
         'Syntax module requires highlight.js. Please include the library on the page before Quill.',
       );
     }
-    this.languages = this.options.languages.reduce((memo, { key }) => {
-      memo[key] = true;
-      return memo;
-    }, {});
     this.highlightBlot = this.highlightBlot.bind(this);
     this.initListener();
     this.initTimer();
@@ -229,7 +225,6 @@ class Syntax extends Module {
   }
 
   highlightBlot(text, language = 'plain') {
-    language = this.languages[language] ? language : 'plain';
     if (language === 'plain') {
       return escapeText(text)
         .split('\n')

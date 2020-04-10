@@ -243,17 +243,13 @@ function convertListHTML(items, lastIndent, types) {
   const [tag, attribute] = getListType(type);
   if (indent > lastIndent) {
     types.push(type);
-    if (indent === lastIndent + 1) {
-      return `<${tag}><li${attribute}>${convertHTML(
-        child,
-        offset,
-        length,
-      )}${convertListHTML(rest, indent, types)}`;
-    }
-    return `<${tag}><li>${convertListHTML(items, lastIndent + 1, types)}`;
+    return `<${tag}><li${attribute}>${convertHTML(
+      child,
+      offset,
+      length,
+    )}${convertListHTML(rest, indent, types)}`;
   }
-  const previousType = types[types.length - 1];
-  if (indent === lastIndent && type === previousType) {
+  if (indent === lastIndent) {
     return `</li><li${attribute}>${convertHTML(
       child,
       offset,
